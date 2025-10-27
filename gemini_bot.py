@@ -41,7 +41,8 @@ app = ApplicationBuilder().token(BOT_TOKEN).build()
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
 print("🤖 Gemini бот запущен!")
-app.run_forever()
+# Новая, исправленная строка
+app.run_polling()
 
 
 
