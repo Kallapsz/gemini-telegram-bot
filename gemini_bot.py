@@ -4,10 +4,16 @@ from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filte
 import os
 
 # === Настройки (используем переменные окружения Render) ===
-BOT_TOKEN = os.getenv("8366778971:AAF93pSknWi8n641oSQ9gqC_R6sitgt5Jb0")
-GEMINI_API_KEY = os.getenv("AIzaSyD00Ct0fyuFakJDMR4YH8FvQd3E6UMRRAg")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-# Инициализация Gemini
+# Проверяем наличие токенов
+if not BOT_TOKEN:
+    raise ValueError("❌ BOT_TOKEN не найден! Добавь его в Render → Environment.")
+if not GEMINI_API_KEY:
+    raise ValueError("❌ GEMINI_API_KEY не найден! Добавь его в Render → Environment.")
+
+# === Инициализация Gemini ===
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
@@ -36,6 +42,7 @@ app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
 print("🤖 Gemini бот запущен!")
 app.run_polling()
+
 
 
 
