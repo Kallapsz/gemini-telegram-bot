@@ -1,0 +1,38 @@
+name: Telegram Bot Scheduler
+
+# Запуск по расписанию: каждые 5 минут
+on:
+  schedule:
+    # cron: "* /5 * * * *" означает "каждые 5 минут"
+    - cron: '*/5 * * * *'
+  # Также можно запускать вручную
+  workflow_dispatch:
+
+jobs:
+  run_bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # Настраиваем Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # Устанавливаем зависимости
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      # Запускаем бота с секретами
+      - name: Run Telegram Bot
+        env:
+          # Передаем секреты как переменные окружения
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python gemini_bot.py
